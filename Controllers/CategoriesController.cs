@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LearnSwagger.EntityFramework;
+using LearnSwagger.EntityFramework.Entities;
 using LearnSwagger.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -81,22 +82,63 @@ namespace LearnLazyLoader.Controllers
             }
         }
 
-        //// POST: api/Categories
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
+        // POST: api/Categories
+        [HttpPost]
+        public async Task<IActionResult> Post(CategoryDto categoryDto)
+        {
+            try{
+                var category = new Category();
+                category.Name = categoryDto.Name;
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
 
-        //// PUT: api/Categories/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+        // PUT: api/Categories/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, CategoryDto categoryDto)
+        {
+            try
+            {
+                var category = _context.Categories.Where(x=>x.Id == id).FirstOrDefault();
+                if (category != null)
+                {
+                    category.Name = categoryDto.Name;
+                    _context.SaveChanges();
+                    return Ok();
+                }
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
 
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        // DELETE: api/ApiWithActions/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var category = _context.Categories.Where(x => x.Id == id).FirstOrDefault();
+                if (category != null)
+                {
+                    _context.Categories.Remove(category);
+                    _context.SaveChanges();
+                    return Ok();
+                }
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

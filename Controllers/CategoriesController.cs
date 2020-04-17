@@ -23,14 +23,46 @@ namespace LearnLazyLoader.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var categories = _context.Categories.ToList();
-            List<CategoryDto> categoriesDto = new List<CategoryDto>();
-            foreach (var category in categories)
+            try
             {
+                var categories = _context.Categories.ToList();
+                List<CategoryDto> categoriesDto = new List<CategoryDto>();
+                foreach (var category in categories)
+                {
+                    var categoryDto = new CategoryDto();
+                    categoryDto.Id = category.Id;
+                    categoryDto.Name = category.Name;
+
+                    foreach (var product in category.Products)
+                    {
+                        var productDto = new ProductDto();
+                        productDto.Id = product.Id;
+                        productDto.CategoryId = product.CategoryId;
+                        productDto.Name = product.Name;
+                        productDto.Colour = product.Colour;
+                        productDto.Price = product.Price;
+                        categoryDto.Products.Add(productDto);
+                    }
+                    categoriesDto.Add(categoryDto);
+                }
+                return Ok(categoriesDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        // GET: api/Categories/5
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            try
+            {
+                var category = _context.Categories.Where(x => x.Id == id).FirstOrDefault();
                 var categoryDto = new CategoryDto();
                 categoryDto.Id = category.Id;
                 categoryDto.Name = category.Name;
-
                 foreach (var product in category.Products)
                 {
                     var productDto = new ProductDto();
@@ -41,34 +73,30 @@ namespace LearnLazyLoader.Controllers
                     productDto.Price = product.Price;
                     categoryDto.Products.Add(productDto);
                 }
-                categoriesDto.Add(categoryDto);
+                return Ok(categoryDto);
             }
-            return Ok(categoriesDto);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
-        // GET: api/Categories/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //// POST: api/Categories
+        //[HttpPost]
+        //public void Post([FromBody] string value)
+        //{
+        //}
 
-        // POST: api/Categories
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        //// PUT: api/Categories/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
-        // PUT: api/Categories/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE: api/ApiWithActions/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

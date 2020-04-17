@@ -20,23 +20,23 @@ namespace LearnLazyLoader.Controllers
         {
             _context = context;
         }
-        public IActionResult Get()
-        {
-            List<Product> products = _context.Products.ToList();
-            List<ProductDto> productsDto = new List<ProductDto>();
-            foreach (var product in products)
-            {
-                var productDto = new ProductDto();
-                productDto.Id = product.Id;
-                productDto.CategoryId = product.CategoryId;
-                productDto.Name = product.Name;
-                productDto.Colour = product.Colour;
-                productDto.Price = product.Price;
-                productDto.Category.Id = product.Category.Id;
-                productDto.Category.Name = product.Category.Name;
-                productsDto.Add(productDto);
-            }
-            return Ok(productsDto);
-        }
+        //public IActionResult Get()
+        //{
+        //    List<Product> products = _context.Products.ToList();
+        //    List<ProductDto> productsDto = new List<ProductDto>();
+        //    foreach (var product in products)
+        //    {
+        //        var productDto = new ProductDto();
+        //        productDto.Id = product.Id;
+        //        productDto.CategoryId = product.CategoryId;
+        //        productDto.Name = product.Name;
+        //        productDto.Colour = product.Colour;
+        //        productDto.Price = product.Price;
+        //        productDto.Category.Id = product.Category.Id;
+        //        productDto.Category.Name = product.Category.Name;
+        //        productsDto.Add(productDto);
+        //    }
+        //    return Ok(productsDto);
+        //}
     }
 }
